@@ -156,8 +156,9 @@ class TestPCA(unittest.TestCase):
             pca.singular_values_, rpca.singular_values_, decimal=8
         )
 
-    def test_incremental_pca(self):
-        data = self.ionosphere
+    @with_dasktable
+    def test_incremental_pca(self, prepare_table):
+        data = prepare_table(self.ionosphere)
         self.__ipca_test_helper(data, n_com=3, min_xpl_var=0.49)
         self.__ipca_test_helper(data, n_com=32, min_xpl_var=1)
 
@@ -169,7 +170,7 @@ class TestPCA(unittest.TestCase):
         self.assertEqual(n_com, pca_model.n_components)
         self.assertEqual((n_com, data.X.shape[1]), pca_model.components_.shape)
         proj = np.dot(data.X - pca_model.mean_, pca_model.components_.T)
-        np.testing.assert_almost_equal(pca_model(data).X, proj)
+        np.testing.assert_almost_equal(pca_model(data).X, np.asarray(proj))
         pc1_ipca = pca_model.components_[0]
         self.assertAlmostEqual(np.linalg.norm(pc1_ipca), 1)
         pc1_pca = PCA(n_components=n_com)(data).components_[0]
