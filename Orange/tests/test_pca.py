@@ -156,9 +156,8 @@ class TestPCA(unittest.TestCase):
             pca.singular_values_, rpca.singular_values_, decimal=8
         )
 
-    @with_dasktable
-    def test_incremental_pca(self, prepare_table):
-        data = prepare_table(self.ionosphere)
+    def test_incremental_pca(self):
+        data = self.ionosphere
         self.__ipca_test_helper(data, n_com=3, min_xpl_var=0.49)
         self.__ipca_test_helper(data, n_com=32, min_xpl_var=1)
 
